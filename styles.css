@@ -124,5 +124,5 @@ h2 { font-size: clamp(1.9rem, 3vw, 2.7rem); line-height: 1.15; color: var(--navy
 }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  .carousel-slide, .button { transition: none; }
+  .button { transition: none; }
 }

@@ -1,11 +1,9 @@
-const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const SLIDE_DELAY = 3500; // 3.5 seconds between slides
 
-document.querySelectorAll('.service-carousel').forEach((carousel, cardIndex) => {
+document.querySelectorAll('.service-carousel').forEach((carousel) => {
   const slides = Array.from(carousel.querySelectorAll('.carousel-slide'));
   const dotsWrap = carousel.querySelector('.carousel-dots');
-  const delay = Number(carousel.dataset.delay) || 3500;
   let current = 0;
-  let timerId = null;
 
   const dots = slides.map(() => {
     const dot = document.createElement('span');
@@ -23,20 +21,10 @@ document.querySelectorAll('.service-carousel').forEach((carousel, cardIndex) => 
     current = next;
   };
 
-  const tick = () => {
-    show((current + 1) % slides.length);
-    timerId = setTimeout(tick, delay);
-  };
-  const start = () => { clearTimeout(timerId); timerId = setTimeout(tick, delay); };
-  const stop = () => clearTimeout(timerId);
-
   show(0);
-  if (reduceMotion) return;
 
-  // Autoplay, staggered so the three cards don't flip in unison; pause on hover/focus.
-  setTimeout(start, cardIndex * 900);
-  carousel.addEventListener('mouseenter', stop);
-  carousel.addEventListener('mouseleave', start);
-  carousel.addEventListener('focusin', stop);
-  carousel.addEventListener('focusout', start);
+  // Scrolls on its own every 3.5s, no hover needed.
+  setInterval(() => {
+    if (!document.hidden) show((current + 1) % slides.length);
+  }, SLIDE_DELAY);
 });
